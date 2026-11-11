@@ -21,7 +21,7 @@ export function SaveTheDate() {
     const url = window.location.href;
     const data = {
       title: `${wedding.groom.shortName} & ${wedding.bride.shortName} — Wedding`,
-      text: `We're getting married! Join us from 25–27 November 2026 in Chitradurga. ${wedding.hashtag}`,
+      text: `We're getting married! Join us on 26–27 November 2026 in Chitradurga. ${wedding.hashtag}`,
       url,
     };
     try {

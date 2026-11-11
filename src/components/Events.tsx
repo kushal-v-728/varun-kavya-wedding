@@ -1,27 +1,11 @@
 import { wedding, type WeddingEvent, venueOf } from '../config';
 import { googleCalendarUrl } from '../lib/calendar';
 import { Chapter } from './Chapter';
-import {
-  CalendarIcon,
-  ClockIcon,
-  DressIcon,
-  MehndiIcon,
-  PinIcon,
-  RingIcon,
-  SparkleIcon,
-  SunIcon,
-} from './Ornaments';
-
-const ICONS = {
-  sun: SunIcon,
-  mehandi: MehndiIcon,
-  sparkle: SparkleIcon,
-  ring: RingIcon,
-} as const;
+import { CalendarIcon, ClockIcon, PinIcon, RingIcon, SparkleIcon } from './Ornaments';
 
 function EventCard({ event }: { event: WeddingEvent }) {
   const day = event.dateISO.slice(-2);
-  const Icon = ICONS[event.icon];
+  const Icon = event.icon === 'ring' ? RingIcon : SparkleIcon;
   const venue = venueOf(event);
 
   return (
@@ -54,28 +38,9 @@ function EventCard({ event }: { event: WeddingEvent }) {
           </dt>
           <dd>{event.timeLabel}</dd>
         </div>
-        <div>
-          <dt>
-            <PinIcon />
-            <span className="sr-only">Venue</span>
-          </dt>
-          <dd>
-            {venue.name}
-            {venue.id === 'ashoka' ? ` · ${venue.subtitle}` : ''}
-          </dd>
-        </div>
       </dl>
 
       <p className="event__blurb">{event.blurb}</p>
-
-      {event.dressCode && (
-        <p className="event__dress">
-          <DressIcon />
-          <span>
-            Dress code <strong>{event.dressCode}</strong>
-          </span>
-        </p>
-      )}
 
       <div className="event__actions">
         <a className="link-underline" href={googleCalendarUrl(event)} target="_blank" rel="noreferrer">
@@ -90,8 +55,6 @@ function EventCard({ event }: { event: WeddingEvent }) {
 }
 
 export function Events() {
-  const card = wedding.celebrationCard;
-
   return (
     <Chapter
       id="events"
@@ -104,11 +67,11 @@ export function Events() {
         <span className="eyebrow__rule" />
       </p>
       <h2 className="section-title">
-        Three days, <em>one promise</em>
+        Two days, <em>one promise</em>
       </h2>
       <p className="section-sub">
-        Haldi and mehandi under the open sky, then the evening of joy and the sacred morning
-        that follows. We would be honoured to have you with us for all of it.
+        We would be honoured to have you with us for both the evening of joy and the
+        sacred morning that follows.
       </p>
 
       <div className="events__stack">
@@ -117,46 +80,16 @@ export function Events() {
         ))}
       </div>
 
-      <a
-        className="events__card"
-        href={`${import.meta.env.BASE_URL}images/${card.src}.webp`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <img
-          src={`${import.meta.env.BASE_URL}images/${card.src}.webp`}
-          alt={card.alt}
-          width={820}
-          height={1230}
-          loading="lazy"
-          decoding="async"
-        />
-        <span className="events__card-caption">
-          {card.caption}
-          <em>Tap to open</em>
+      <p className="events__venue">
+        <PinIcon />
+        <span>
+          Both ceremonies take place at <strong>{wedding.venue.name}</strong>,{' '}
+          {wedding.venue.addressLines.join(', ')}
         </span>
-      </a>
-
-      <div className="events__venues">
-        <p>
-          <PinIcon />
-          <span>
-            <strong>25 November</strong> — {wedding.venues.ashoka.name} ({wedding.venues.ashoka.subtitle}),{' '}
-            {wedding.venues.ashoka.addressLines.join(', ')}
-          </span>
-        </p>
-        <p>
-          <PinIcon />
-          <span>
-            <strong>26 &amp; 27 November</strong> — {wedding.venue.name},{' '}
-            {wedding.venue.addressLines.join(', ')}
-          </span>
-        </p>
         <a href="#venue" className="link-underline">
-          View both venues
+          View venue
         </a>
-      </div>
-
+      </p>
     </Chapter>
   );
 }
